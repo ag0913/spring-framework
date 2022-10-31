@@ -1,2 +1,4 @@
-package org.springframework.service;public class UserService {
+package org.springframework.service;
+
+public class UserService {
 }

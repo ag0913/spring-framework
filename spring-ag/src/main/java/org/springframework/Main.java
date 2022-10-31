@@ -1,7 +1,13 @@
 package org.springframework;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.service.UserService;
+
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("Hello world!");
+		ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
+		UserService bean = context.getBean(UserService.class);
+		System.out.println(bean);
 	}
 }
