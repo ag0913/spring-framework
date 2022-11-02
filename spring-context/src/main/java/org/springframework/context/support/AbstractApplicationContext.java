@@ -177,7 +177,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Logger used by this class. Available to subclasses. */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	/** Unique id for this context, if any. */
+	/**
+	 * 创建上下文唯一标识
+	 * Unique id for this context, if any. */
 	private String id = ObjectUtils.identityToString(this);
 
 	/** Display name. */
@@ -244,6 +246,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Create a new AbstractApplicationContext with no parent.
 	 */
 	public AbstractApplicationContext() {
+		// 创建资源模式处理器，这里是用来解析XML配置文件的
 		this.resourcePatternResolver = getResourcePatternResolver();
 	}
 
@@ -546,13 +549,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		synchronized (this.startupShutdownMonitor) {
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
-			// Prepare this context for refreshing.
+			/**
+			 * 	准备刷新
+			 * 	1、设置容器启动时间
+			 * 	2、设置活跃状态true
+			 * 	3、设置关闭状态false
+			 * 	4、获取Environment对象，并加载当前系统属性值到Environment对象中
+			 * 	5、准备监听器和事件的集合对象，默认为空的集合
+			 */
 			prepareRefresh();
 
-			// Tell the subclass to refresh the internal bean factory.
+			// 创建Bean工厂，最重要的是将BeanDefinition信息装载到工厂中
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// Prepare the bean factory for use in this context.
+			//
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -616,7 +626,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * active flag as well as performing any initialization of property sources.
 	 */
 	protected void prepareRefresh() {
-		// Switch to active.
+		// 切换标志位.
 		this.startupDate = System.currentTimeMillis();
 		this.closed.set(false);
 		this.active.set(true);
@@ -630,14 +640,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 
-		// Initialize any placeholder property sources in the context environment.
+		// Initialize any placeholder property sources in the context environment
+		// 留给子类实现，初始化属性资源
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		// 验证需要的属性文件是否都已经放入环境中
 		getEnvironment().validateRequiredProperties();
 
-		// Store pre-refresh ApplicationListeners...
+		// 判断刷新前的应用程序监听器集合是否为空，为空将监听器添加到此集合中，springboot中，这一步的this.applicationListeners是有14个的
 		if (this.earlyApplicationListeners == null) {
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
