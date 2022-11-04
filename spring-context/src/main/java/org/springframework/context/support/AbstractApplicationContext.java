@@ -559,7 +559,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			 */
 			prepareRefresh();
 
-			// 创建Bean工厂，最重要的是将BeanDefinition信息装载到工厂中
+			// 创建Bean工厂，最重要的是将BeanDefinition信息注册到工厂中
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			//

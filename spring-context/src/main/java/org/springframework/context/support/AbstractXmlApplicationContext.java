@@ -86,15 +86,19 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
+		// 设置系统环境，方面后面进行属性值的替换<property name=username value=${username} />
 		beanDefinitionReader.setEnvironment(this.getEnvironment());
+
+		// 指定ResourceLoader
 		beanDefinitionReader.setResourceLoader(this);
-		// 实体(xml标签)解析器，dtd,xsd或者自定的
+		// 实体(xml标签)解析器，dtd,xsd或者自定的,new ResourceEntityResolver定义了dtd和xsd
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
+		// 对当前Reader进行验证，前面设置过是否要验证，默认是true
 		initBeanDefinitionReader(beanDefinitionReader);
-		// 开始完成BeanDefinition信息的获取
+		// 开始完成BeanDefinition信息的获取，和本方法名一样，但签名不一样
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
@@ -106,7 +110,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @param reader the bean definition reader used by this context
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader#setDocumentReaderClass
 	 */
-	protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
+	protected void  initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
 		reader.setValidating(this.validating);
 	}
 
@@ -123,7 +127,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getResourcePatternResolver
 	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
-		// 以Resource的方式获取配置文件
+		// 以Resource的方式获取配置文件，这种方式很少用，一般classpathxmlapplicationcontext(config.xml,Class clazz);
 		Resource[] configResources = getConfigResources();
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);

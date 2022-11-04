@@ -85,6 +85,7 @@ public class PluggableSchemaResolver implements EntityResolver {
 	 */
 	public PluggableSchemaResolver(@Nullable ClassLoader classLoader) {
 		this.classLoader = classLoader;
+		// spring.schemas,里面是文件的网络地址对应的本地文件地址
 		this.schemaMappingsLocation = DEFAULT_SCHEMA_MAPPINGS_LOCATION;
 	}
 

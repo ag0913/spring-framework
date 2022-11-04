@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.support.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -46,18 +47,6 @@ import org.springframework.beans.factory.parsing.ConstructorArgumentEntry;
 import org.springframework.beans.factory.parsing.ParseState;
 import org.springframework.beans.factory.parsing.PropertyEntry;
 import org.springframework.beans.factory.parsing.QualifierEntry;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.AutowireCandidateQualifier;
-import org.springframework.beans.factory.support.BeanDefinitionDefaults;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.LookupOverride;
-import org.springframework.beans.factory.support.ManagedArray;
-import org.springframework.beans.factory.support.ManagedList;
-import org.springframework.beans.factory.support.ManagedMap;
-import org.springframework.beans.factory.support.ManagedProperties;
-import org.springframework.beans.factory.support.ManagedSet;
-import org.springframework.beans.factory.support.MethodOverrides;
-import org.springframework.beans.factory.support.ReplaceOverride;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -412,9 +401,12 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
+//		先获取id
 		String id = ele.getAttribute(ID_ATTRIBUTE);
+//		获取name
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
 
+//		别名集合
 		List<String> aliases = new ArrayList<>();
 		if (StringUtils.hasLength(nameAttr)) {
 			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
@@ -431,9 +423,10 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		if (containingBean == null) {
+			// 验证id唯一性
 			checkNameUniqueness(beanName, aliases, ele);
 		}
-
+//		详细解析，比如abstract，class，parent，description，完整的一个bd，可以放到BeanDefinitionMap中了
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -465,6 +458,7 @@ public class BeanDefinitionParserDelegate {
 				}
 			}
 			String[] aliasesArray = StringUtils.toStringArray(aliases);
+			// BeanDefinition包装类
 			return new BeanDefinitionHolder(beanDefinition, beanName, aliasesArray);
 		}
 
@@ -512,6 +506,8 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		try {
+//			new GenericBeanDefinition(),设置了两个属性值，className,parent,
+//			与他平级的还有一个，RootBeanDefinition，父类是AbstractBeanDefinition，
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
 
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);

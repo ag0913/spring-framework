@@ -133,7 +133,7 @@ public abstract class AbstractRefreshableConfigApplicationContext extends Abstra
 	}
 
 	/**
-	 * Sets the id of this context to the bean name by default,
+	 * Sets the id of this context to the bean name by default
 	 * for cases where the context instance is itself defined as a bean.
 	 */
 	@Override
