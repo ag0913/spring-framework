@@ -9,4 +9,17 @@
 
 	<ag:user id="ylj" username="焰灵姬" age="18" level="30"/>
 	<!--	<bean class="org.springframework.service.UserService"/>-->
+
+	<bean class="org.springframework.selfEditor.Customer">
+		<property name="name" value="zhangdan"/>
+		<property name="address" value="江苏省_无锡市_惠山区"/>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="propertyEditorRegistrars">
+			<list>
+				<bean class="org.springframework.selfEditor.AdressPropertyEditorRegistrar"/>
+			</list>
+		</property>
+	</bean>
 </beans>

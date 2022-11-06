@@ -562,7 +562,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 创建Bean工厂，最重要的是将BeanDefinition信息注册到工厂中
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			//
+			// beanfactory准备，对各种属性设置
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -691,13 +691,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
+//		设置类加载器为上下文类加载器
 		beanFactory.setBeanClassLoader(getClassLoader());
 		if (!shouldIgnoreSpel) {
+//			处理spel表达式，#{}
 			beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		}
+
+//		对bean的属性设置管理的一个工具类，比如一个Date，解析成string，在初始化bean，填充属性的时候会用到
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
+//		添加BeanPostProcessor
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
