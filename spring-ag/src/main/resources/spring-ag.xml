@@ -15,11 +15,21 @@
 		<property name="address" value="江苏省_无锡市_惠山区"/>
 	</bean>
 
+<!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--		<property name="propertyEditorRegistrars">-->
+<!--			<list>-->
+<!--				<bean class="org.springframework.selfEditor.AdressPropertyEditorRegistrar"/>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+
 	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-		<property name="propertyEditorRegistrars">
-			<list>
-				<bean class="org.springframework.selfEditor.AdressPropertyEditorRegistrar"/>
-			</list>
+		<property name="customEditors">
+			<map>
+				<entry key="org.springframework.selfEditor.Address">
+					<value>org.springframework.selfEditor.AdressPropertyEditor</value>
+				</entry>
+			</map>
 		</property>
 	</bean>
 </beans>

@@ -140,7 +140,6 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 		// 调用父类构造，路径解析器，xml验证标志以及一些属性初始化
 		super(parent);
 		// spring.active.profile，指定配置文件路径,包括解析
-
 		setConfigLocations(configLocations);
 		if (refresh) {
 			refresh();
