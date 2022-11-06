@@ -150,7 +150,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 		// pre/post ProcessXml 前后置扩展实现
 		preProcessXml(root);
-		// 开始从root解析，带着这个delegate解析器
+		// 核心，开始从root解析，带着这个delegate解析器
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 
@@ -180,11 +180,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					// 判断是不是默认的命名空间，是不是默认自带的标签，比如beans标签，默认自带bean，alias，import
-//					beans，不是的话另外使用一种方式解析
+//					beans，不是的话另外使用一种方式解析，我们定义的Bean标签就在这里做解析
 					if (delegate.isDefaultNamespace(ele)) {
 						parseDefaultElement(ele, delegate);
 					}
 					else {
+						// <context:xx,<aop:xx,<tx:xxx,这些标签不属于默认的命名空间，需要在xml文件头引入
+						// 一个该标签的解析方式。
 						delegate.parseCustomElement(ele);
 					}
 				}
