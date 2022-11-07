@@ -70,6 +70,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 此类是最重要的一个BFPP实现类
+ * 功能如下
+ * 解析加了@Configuration的配置类、@ComponentScan扫描包、@ComponentScans、@Import注解
+ *
+ *
+ *
  * {@link BeanFactoryPostProcessor} used for bootstrapping processing of
  * {@link Configuration @Configuration} classes.
  *

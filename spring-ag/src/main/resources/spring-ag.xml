@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:ag="http://www.ag.com/schema/user"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
 	    http://www.springframework.org/schema/beans/spring-beans.xsd
-	     http://www.ag.com/schema/user
-	      http://www.ag.com/schema/user.xsd">
+	    http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.ag.com/schema/user
+	    http://www.ag.com/schema/user.xsd">
 
+	<context:component-scan base-package="org.springframework.service"/>
 	<ag:user id="ylj" username="焰灵姬" age="18" level="30"/>
 	<!--	<bean class="org.springframework.service.UserService"/>-->
 

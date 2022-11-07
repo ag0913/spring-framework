@@ -187,6 +187,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 					else {
 						// <context:xx,<aop:xx,<tx:xxx,这些标签不属于默认的命名空间，需要在xml文件头引入
 						// 一个该标签的解析方式。
+						// 比如<context:component-scan 会在这里进去
 						delegate.parseCustomElement(ele);
 					}
 				}
