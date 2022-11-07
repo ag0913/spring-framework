@@ -73,13 +73,22 @@ final class PostProcessorRegistrationDelegate {
 		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+//		首先执行BeanDefinitionRegistryPostProcessors，如果有的话
+//		将已经执行过的BFPP放入到processedBean
 		Set<String> processedBeans = new HashSet<>();
 
+//		当前DefaultListableBeanFactory，实现了BeanDefinitionRegistry接口，所以为true
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+			// BeanDefinitionRegistryPostProcessor是BeanFactoryPostProcessor的子集
+			// BeanFactoryPostProcessor主要针对的操作对象是BeanFactory，
+			// 而BeanDefinitionRegistryPostProcessor主要针对的BeanDefinition
+
+//			通过存放的类型可以看出这两个集合分别存放的是什么
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
+//			迭代分别存储
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =

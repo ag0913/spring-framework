@@ -9,13 +9,14 @@ import org.springframework.service.UserService;
 public class Main {
 	public static void main(String[] args) {
 		//
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-${USER}.xml");
+//		ApplicationContext context = new ClassPathXmlApplicationContext("spring-${USER}.xml");
 //		Object userService = context.getBean(UserService.class);
 //		System.out.println(userService);
 //		User ag = (User) context.getBean("ylj");
 //		System.out.println(ag);
 
-		System.out.println(context.getBean(Customer.class).getAddress());
+//		System.out.println(context.getBean(Customer.class).getAddress());
+		ApplicationContext ac = new MyClassPathXmlApplicationContext("spring-${USER}.xml");
 	}
 
 }
