@@ -91,15 +91,18 @@ abstract class ConfigurationClassUtils {
 		}
 
 		AnnotationMetadata metadata;
+		// 判断是否归属于AnnotatedBeanDefinition，rootBeanDefinition是spring内部的bd，abd是注解注入的
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
+//		判断的是不是spring中默认的bd
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.
 			Class<?> beanClass = ((AbstractBeanDefinition) beanDef).getBeanClass();
+//			如果是以下四种直接返回
 			if (BeanFactoryPostProcessor.class.isAssignableFrom(beanClass) ||
 					BeanPostProcessor.class.isAssignableFrom(beanClass) ||
 					AopInfrastructureBean.class.isAssignableFrom(beanClass) ||
@@ -121,11 +124,19 @@ abstract class ConfigurationClassUtils {
 				return false;
 			}
 		}
-
+		/**
+		 * 这里做了三层判断，
+		 * 第一判断是不是@Configuration，
+		 * 第二判断是否为@Component,@ComponentScan,@Import,@ImportResource
+		 * 第三判断里面有没有被@Bean 修饰的方法
+		 */
+//		判断是不是一个Configuration修饰的对象
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
+//		如果是，并且不是代理模式，则将这个bd设置一个full的属性值
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+//		如果是或者被注解@Component,@ComponentScan,@Import,@ImportResource或者@Bean标记的，则定义为lite
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}

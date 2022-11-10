@@ -57,6 +57,7 @@ final class PostProcessorRegistrationDelegate {
 
 	/**
 	 *	{@link  BeanDefinitionRegistryPostProcessor} 继承 {@link BeanFactoryPostProcessor}
+	 *		BDRPP 是beanDefinition的处理器，BFPP是BeanFactory的处理器，而beanDefinition是放在beanFactory中的
 	 *
 	 *
 	 *	@see #invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory,List<BeanFactoryPostProcessor>)

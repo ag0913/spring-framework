@@ -70,6 +70,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 注解 + 配置xml的时候就会使用到。
+ *
  * 此类是最重要的一个BFPP实现类
  * 功能如下
  * 解析加了@Configuration的配置类、@ComponentScan扫描包、@ComponentScans、@Import注解
@@ -239,6 +241,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+		// 根据对应的registryId对象生成的hashcode值，此对象只会被操作一次，如果之前处理过则会抛出异常
 		int registryId = System.identityHashCode(registry);
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
@@ -280,17 +283,26 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * {@link Configuration} classes.
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+//		beanDefinition的包装类，里面有三个属性，beanName，alias，beanDefinition
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
+//		这里的registry就是DefaultListableBeanFactory，获取所有已经注册进来的beanName
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
+//		遍历所有bdf，筛选出被注解修饰的bdf
+
+//		配置文件的bdf是GenericBeanDefinition，而使用ScannedGenericBeanDefinition是注解扫描得到的
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
+//			如果configurationClass有值说明被处理过了
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+//			筛选出被注解修饰的类,获取他们的注解元素值，然后区分精简(lite)和完整(full)配置，
+//			加以标记full/lite标记，还做了排序值得设置
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
+//				添加，表示他们是一个配置类
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
 		}
@@ -308,6 +320,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		});
 
 		// Detect any custom bean name generation strategy supplied through the enclosing application context
+		// 判断当前工厂是否为SingletonBeanRegistry，是的话设置自定义命名生成策略
 		SingletonBeanRegistry sbr = null;
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
