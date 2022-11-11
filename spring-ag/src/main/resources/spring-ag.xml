@@ -10,6 +10,9 @@
 	    http://www.ag.com/schema/user
 	    http://www.ag.com/schema/user.xsd">
 
+
+	<context:component-scan base-package="org.springframework.ccpp"/>
+
 	<context:component-scan base-package="org.springframework.service"/>
 	<ag:user id="ylj" username="焰灵姬" age="18" level="30"/>
 	<!--	<bean class="org.springframework.service.UserService"/>-->
